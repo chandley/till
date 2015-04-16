@@ -1,31 +1,33 @@
 require 'receipt'
 
 describe Receipt do
-  let(:tea) {double :item, name: 'tea', price: 1}
-  let(:cake) {double :item, name: 'cake', price: 2}
+  let(:tea) { double :item, name: 'tea', price: 1 }
+  let(:cake) { double :item, name: 'cake', price: 2 }
+
   context 'header' do
-     it 'shows shop name' do
-       till = double :till
-       receipt = Receipt.new(till)
-       expect(receipt.header[:shopName]).to eq('Todd pies')
-     end
+    it 'shows shop name' do
+      till = double :till
+      receipt = Receipt.new(till)
+      expect(receipt.header[:shopName]).to eq('Todd pies')
+    end
   end
+
   context 'line items' do
     it 'has name, quantity and unit price' do
       till = double :till, items: [tea]
       receipt = Receipt.new(till)
-      expect(receipt.line_items).to eq([{name: 'tea', quantity: 1, price: 1}])
+      expect(receipt.line_items).to include(name: 'tea', quantity: 1, price: 1)
     end
     it 'shows quantity for multiples of same item' do
       till_multiple_items = double :till, items: [tea, tea]
       receipt = Receipt.new(till_multiple_items)
-      expect(receipt.line_items).to eq([{name: 'tea', quantity: 2, price: 1}])
+      expect(receipt.line_items).to include(name: 'tea', quantity: 2, price: 1)
     end
     it 'shows two different items' do
       till_different_items = double :till, items: [tea, cake]
       receipt = Receipt.new(till_different_items)
-      expect(receipt.line_items).to include({name: 'tea', quantity: 1, price: 1})
-      expect(receipt.line_items).to include({name: 'cake', quantity: 1, price: 2})
+      expect(receipt.line_items).to include(name: 'tea', quantity: 1, price: 1)
+      expect(receipt.line_items).to include(name: 'cake', quantity: 1, price: 2)
     end
   end
 end
