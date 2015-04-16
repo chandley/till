@@ -5,6 +5,10 @@ class Till
     @items = []
   end
 
+  def total
+    1
+  end
+
   def add item
     @items.push item
   end
