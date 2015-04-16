@@ -44,9 +44,10 @@ describe Discount do
 
   context 'muffin discount' do
     muffin_calc = Proc.new do |till|
+      discount = 0.1
       muffins = till.items.select{|item| item.name == 'muffin'}
-      values = muffins.map{|muffin| muffin.value}
-      values.reduce(0,:+)
+      values = muffins.map{|muffin| muffin.price}
+      values.reduce(0,:+)*discount
     end
     
     let(:discount){ Discount.new &muffin_calc } 
@@ -54,6 +55,11 @@ describe Discount do
       tea = double :item, name: 'tea'
       till = double :till, items: [tea]
       expect(discount.value(till)).to eq(0)
+    end 
+    it 'applies to a muffin' do
+      muffin = double :item, name: 'muffin', price: 10
+      till = double :till, items: [muffin]
+      expect(discount.value(till)).to eq(1)
     end 
   end
   
