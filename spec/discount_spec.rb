@@ -28,7 +28,7 @@ describe Discount do
       discount = Discount.new { |till| till.total*0.2}
       expect(discount.description(till)).to eq('20% from $50.00')
     end
-end
+  end
 
   context 'discount with limit' do
     it 'has zero value below limit' do
@@ -40,6 +40,21 @@ end
       big_till = double :till, total:70
       expect(discount.value(big_till)).to eq(7)
     end
+  end
+
+  context 'muffin discount' do
+    muffin_calc = Proc.new do |till|
+      muffins = till.items.select{|item| item.name == 'muffin'}
+      values = muffins.map{|muffin| muffin.value}
+      values.reduce(0,:+)
+    end
+    
+    let(:discount){ Discount.new &muffin_calc } 
+    it 'does not apply generally' do
+      tea = double :item, name: 'tea'
+      till = double :till, items: [tea]
+      expect(discount.value(till)).to eq(0)
+    end 
   end
   
 
