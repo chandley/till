@@ -1,33 +1,46 @@
 require 'discount'
 
-describe Discount do 
-  it 'has zero value with no items in till' do
-    discount = Discount.new
-    till = double :till, total: 0, items: []
-    expect(discount.value(till)).to eq(0)
+describe Discount do
+ 
+  let(:till) {double :till, total:50}
+  context 'no items' do
+    it 'has zero value' do
+      discount = Discount.new
+      no_order_till = double :till, total: 0, items: []
+      expect(discount.value(no_order_till)).to eq(0)
+    end
   end
 
-  it 'can apply a 10% discount' do
-    discount = Discount.new { |till| till.total*0.1}
-    till = double :till, total:50
-    expect(discount.value(till)).to eq(5)
-  end
-  it 'can apply a 20% discount' do
-    discount = Discount.new { |till| till.total*0.2}
-    till = double :till, total:50
-    expect(discount.value(till)).to eq(10)
-  end
+  context 'fixed discount' do
+    it 'can apply 10%' do
+      discount = Discount.new { |till| till.total*0.1}
+      expect(discount.value(till)).to eq(5)
+    end
+    it 'can apply 20%' do
+      discount = Discount.new { |till| till.total*0.2}
+      expect(discount.value(till)).to eq(10)
+    end
+    it 'has a description when 10%' do
+      discount = Discount.new { |till| till.total*0.1}
+      expect(discount.description(till)).to eq('10% from $50.00')
+    end
+    it 'has a description when 20%' do
+      discount = Discount.new { |till| till.total*0.2}
+      expect(discount.description(till)).to eq('20% from $50.00')
+    end
+end
 
-  it 'has zero value below threshold' do
-    discount = Discount.new { |till| till.total <= 60 ? 0 : till.total*0.1 }
-    till = double :till, total:50
-    expect(discount.value(till)).to eq(0)
+  context 'discount with limit' do
+    it 'has zero value below limit' do
+      discount = Discount.new { |till| till.total <= 60 ? 0 : till.total*0.1 }
+      expect(discount.value(till)).to eq(0)
+    end
+    it 'has normal value above limit' do
+      discount = Discount.new { |till| till.total <= 60 ? 0 : till.total*0.1 }
+      big_till = double :till, total:70
+      expect(discount.value(big_till)).to eq(7)
+    end
   end
-  it 'has normal value above threshold' do
-    discount = Discount.new { |till| till.total <= 60 ? 0 : till.total*0.1 }
-    till = double :till, total:70
-    expect(discount.value(till)).to eq(7)
-  end
-
   
+
 end
