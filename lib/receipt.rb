@@ -8,6 +8,9 @@ class Receipt
   def header
     { shopName: 'Todd pies' }
   end
+  def totals
+   { tax: 0.15, discount: 'description'}
+  end
 
   private
   def line_item(item)

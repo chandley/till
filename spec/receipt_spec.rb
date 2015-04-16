@@ -30,4 +30,16 @@ describe Receipt do
       expect(receipt.line_items).to include(name: 'cake', quantity: 1, price: 2)
     end
   end
+
+  context 'totals' do
+    let(:till) { double :till, tax: 0.15, discount_description: 'description' }
+    let(:receipt) { Receipt.new(till) }
+
+    it 'shows tax' do
+      expect(receipt.totals).to include(tax: 0.15)
+    end
+    it 'shows one discount calculation' do
+      expect(receipt.totals).to include(discount: 'description')
+    end
+  end
 end
