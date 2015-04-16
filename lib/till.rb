@@ -1,5 +1,11 @@
 class Till
-  def items
-    []
+  attr_reader :items
+
+  def initialize
+    @items = []
+  end
+
+  def add item
+    @items.push item
   end
 end

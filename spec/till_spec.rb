@@ -1,7 +1,13 @@
 require 'till'
 
 describe Till do
-  it "starts off empty" do
-    expect(subject.items).to eq([])
+  context 'items' do
+    it "starts off with none" do
+      expect(subject.items).to eq([])
+    end
+    it "adds one" do
+      subject.add(:item)
+      expect(subject.items).to include(:item)
+    end
   end
 end
