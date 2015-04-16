@@ -1,10 +1,11 @@
 class Till
   require 'json'
-  attr_reader :items
+  attr_reader :items, :discounts
   attr_reader :list
   attr_writer :tax_rate
   def initialize
     @items = []
+    @discounts = []
     @tax_rate = 0
   end
 

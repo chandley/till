@@ -1,6 +1,10 @@
 require 'till'
 
 describe Till do
+  let(:till){ Till.new }
+  let(:tea){double :item, price: 1}
+  let(:cake){double :item, price: 2}
+
   context 'items in order' do
     it "starts off with none" do
       expect(subject.items).to eq([])
@@ -11,10 +15,7 @@ describe Till do
     end
   end
   context 'total' do
-    let(:till){ Till.new }
-    let(:tea){double :item, price: 1}
-    let(:cake){double :item, price: 2}
-    it 'calculates with one item' do
+     it 'calculates with one item' do
       till.add(tea)
       expect(till.total).to eq(1)
     end
@@ -27,6 +28,11 @@ describe Till do
       till.add(tea)
       till.tax_rate = 0.15
       expect(till.tax).to eq(0.15)
+    end
+  end
+  context 'discount' do
+    it 'starts off with none' do
+      expect(till.discounts).to eq([])
     end
   end
   context 'till header' do
