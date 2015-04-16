@@ -23,6 +23,11 @@ describe Till do
       till.add(cake)
       expect(till.total).to eq(3)
     end
+    it 'calculates tax' do
+      till.add(tea)
+      till.tax_rate = 0.15
+      expect(till.tax).to eq(0.15)
+    end
   end
   context 'till header' do
     it 'reads shop name from json file' do
