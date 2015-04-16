@@ -8,5 +8,10 @@ describe Receipt do
     it 'has name, quantity and unit price' do
       expect(receipt.line_items).to eq([{name: 'tea', quantity: 1, price: 1}])
     end
+    it 'shows quantity for multiples of same item' do
+      till_multiple_items = double :till, items: [:tea, :tea]
+      receipt = Receipt.new(till_multiple_items)
+      expect(receipt.line_items).to eq([{name: 'tea', quantity: 2, price: 1}])
+    end
   end
 end
